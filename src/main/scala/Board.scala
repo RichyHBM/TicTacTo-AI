@@ -1,23 +1,30 @@
 
 case class Board(board: Array[Array[String]]) {
-  val rows = 3
-  val cols = 3
-
-  val boardString =
-    s"""
-      |${ board(0)(0) }|${ board(0)(1) }|${ board(0)(2) }
-      |-+-+-
-      |${ board(1)(0) }|${ board(1)(1) }|${ board(1)(2) }
-      |-+-+-
-      |${ board(2)(0) }|${ board(2)(1) }|${ board(2)(2) }
-    """.stripMargin
+  require(board.length == Consts.rows)
+  require(board.forall(_.length == Consts.cols))
 
   def this() = {
-    this(Array.fill[String](3, 3)(" "))
+    this(Array.fill[String](Consts.rows, Consts.cols)(" "))
+  }
+
+  def set(pos: (Int, Int), marker: String) = {
+    require(board(pos._2)(pos._1) == " ")
+    board(pos._2)(pos._1) = marker
   }
 
   def draw = {
-    //print("\033[H\033[2J")
-    println(boardString)
+    print("\033[H\033[2J")
+
+    for(r <- 0 to Consts.rows - 1) {
+      print(" ")
+      for (c <- 0 to Consts.cols - 1) {
+        print(board(r)(c))
+        if(c < Consts.cols - 1)
+          print("|")
+      }
+      println()
+      if(r < Consts.rows - 1)
+        println(" -+-+- ")
+    }
   }
 }
