@@ -50,8 +50,11 @@ case class Board(board: Array[Array[String]]) {
           b.append("|")
       }
       b.append("\n")
-      if(r < Board.maxBoardPos)
-        b.append("  -+-+- \n")
+      if(r < Board.maxBoardPos) {
+        b.append("  ")
+        for(_ <- 0 until Board.maxBoardPos) b.append("-+")
+        b.append("- \n")
+      }
     }
     b.mkString
   }
@@ -59,9 +62,9 @@ case class Board(board: Array[Array[String]]) {
 
 object Board {
 
-  private def allPerms(x: Int, y: List[Int]): List[(Int, Int)] = (x, y) match {
-    case (_, y@h::t) if y.length == 1 => List((x, h))
-    case (_, y@h::t) => (x, h) :: allPerms(x, t)
+  private def allPerms(x: Int, y: List[Int]): List[(Int, Int)] = {
+    if(y.length == 1) List((x, y.head))
+    else (x, y.head) :: allPerms(x, y.tail)
   }
 
   val boardSize = 3
