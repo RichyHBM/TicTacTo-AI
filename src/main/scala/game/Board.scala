@@ -15,6 +15,13 @@ case class Board(board: Array[Array[String]]) {
 
   def canMove = board.exists( _.exists( _ == Board.empty) ) && !hasSomeoneWon
 
+  def allPossibleMoves = {
+    for{
+      y <- board.indices
+      x <- board(y).indices if getMarkerAt(x, y) == Board.empty
+    } yield (x, y)
+  }
+
   def hasSomeoneWon: Boolean = winningMarker != Board.empty
 
   def winningMarker: String = {

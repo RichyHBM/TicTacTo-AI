@@ -113,6 +113,14 @@ class BoardSpec extends Specification {
       }
 
       "Not allow non equal sizes" in {
+        val arr = Array(Array("X", " "), Array("X", " "))
+        val b = new Board(arr)
+        val moves = b.allPossibleMoves
+        moves must contain( (1,0) )
+        moves must contain( (1,1) )
+      }
+
+      "Not allow non equal sizes" in {
         val arr = Array(Array("X", "O", " "), Array("X", " ", " "))
         try {
           val b = new Board(arr)
