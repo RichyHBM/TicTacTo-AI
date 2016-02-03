@@ -5,7 +5,7 @@ object Main {
   def main(args: Array[String]) = {
 
     println(
-      s"""What type of player should player 1 be?
+      s"""What type of player should player 'X' be?
          |1 Input player
          |2 AI player""".stripMargin)
 
@@ -14,7 +14,7 @@ object Main {
       case "2" => new AiPlayer("X")
     }
 
-    println("And player 2?")
+    println("And player 'O'?")
 
     val player2 = scala.io.StdIn.readLine() match {
       case "1" => new InputPlayer("O")

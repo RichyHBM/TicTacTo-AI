@@ -5,21 +5,18 @@ import players.Player
 case class Game(player1: Player, player2: Player) {
   val board = new Board
 
+  def doMove(currPlayer: Player, nextPlayer: Player): Unit = {
+    print("\033[H\033[2J")
+    println(board.render)
+    println("Player " + currPlayer.getMarker)
+    board.set(currPlayer.move, currPlayer.getMarker)
+    if(board.canMove)
+      doMove(nextPlayer, currPlayer)
+  }
+
   def run: Unit = {
-    while(board.canMove) {
-      print("\033[H\033[2J")
-      println(board.render)
-      println("Player 1")
-      board.set(player1.move, player1.getMarker)
+    doMove(player1, player2)
 
-      print("\033[H\033[2J")
-
-      if(board.canMove){
-        println(board.render)
-        println("Player 2")
-        board.set(player2.move, player2.getMarker)
-      }
-    }
     print("\033[H\033[2J")
     println(board.render)
 
