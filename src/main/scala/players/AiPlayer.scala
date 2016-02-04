@@ -2,22 +2,21 @@ package players
 
 import game.{Game, Board}
 
+import scala.util.Random
+
 case class AiPlayer(marker: String) extends Player {
   override def move(board: Board): (Int, Int) = {
-    val default = (0, (0, 0))
-    board.
+    val default = (Integer.MIN_VALUE, Seq((0, 0)))
+    val bestMoves = board.
       allPossibleMoves.
-      map(m => {
-        val mM = (minMax(0, board.set(m, getMarker), ourMove = false), m)
-        print("■")
-        mM
-      }).
-      fold[(Int, (Int, Int))](default)((acc, e) => {
+      groupBy(m => minMax(0, board.set(m, getMarker), ourMove = false)).
+      fold[(Int, Seq[(Int, Int)])](default)((acc, e) => {
       acc match {
         case ac if ac._1 > e._1 => ac
         case _ => e
       }
     })._2
+    bestMoves(Random.nextInt(bestMoves.length))
   }
 
   def minMax(depth: Int, board: Board, ourMove: Boolean): Int = {
