@@ -22,12 +22,21 @@ case class Game(player1: Player, player2: Player) {
     print("\033[H\033[2J")
     println(endGame.render)
 
-    if(endGame.winningMarker == player1.getMarker){
-      println("Player 1 has won!")
-    }else if(endGame.winningMarker == player2.getMarker) {
-      println("Player 2 has won!")
+    val winningMarker = endGame.winningMarker
+
+    if(winningMarker != Board.empty){
+      println(s"Player ${winningMarker} has won!")
     } else {
-      println("No one won!")
+      println("It was a draw!")
     }
+  }
+}
+
+object Game {
+  val X = "X"
+  val O = "O"
+  def getOppositeMarker(marker: String) = {
+    if(marker == X) O
+    else X
   }
 }

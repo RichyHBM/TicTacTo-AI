@@ -42,78 +42,78 @@ class BoardSpec extends Specification {
       }
 
       "Render correctly" in {
-        val arr = List(List("X", " "), List(" ", "O"))
+        val arr = List(List(Game.X, Board.empty), List(Board.empty, Game.O))
         val b = new Board(arr)
         b.render must equalTo(
           "  0 1\n" +
-          "0 X| \n" +
+          s"0 ${Game.X}|${Board.empty}\n" +
           "  -+-\n" +
-          "1  |O\n")
+          s"1 ${Board.empty}|${Game.O}\n")
       }
 
       "Fetch correct marker" in {
-        val arr = List(List("X", "O"), List(" ", "O"))
+        val arr = List(List(Game.X, Game.O), List(Board.empty, Game.O))
         val b = new Board(arr)
-        b.getMarkerAt(0, 0) must equalTo("X")
-        b.getMarkerAt(1, 0) must equalTo("O")
-        b.getMarkerAt(0, 1) must equalTo(" ")
-        b.getMarkerAt(1, 1) must equalTo("O")
+        b.getMarkerAt(0, 0) must equalTo(Game.X)
+        b.getMarkerAt(1, 0) must equalTo(Game.O)
+        b.getMarkerAt(0, 1) must equalTo(Board.empty)
+        b.getMarkerAt(1, 1) must equalTo(Game.O)
       }
 
       "Set marker correctly" in {
-        val arr = List(List("X", " "), List(" ", "O"))
+        val arr = List(List(Game.X, Board.empty), List(Board.empty, Game.O))
         val b = new Board(arr)
-        val newB = b.set((1, 0), "X")
-        newB.getMarkerAt(0, 0) must equalTo("X")
-        newB.getMarkerAt(1, 0) must equalTo("X")
-        newB.getMarkerAt(0, 1) must equalTo(" ")
-        newB.getMarkerAt(1, 1) must equalTo("O")
+        val newB = b.set((1, 0), Game.X)
+        newB.getMarkerAt(0, 0) must equalTo(Game.X)
+        newB.getMarkerAt(1, 0) must equalTo(Game.X)
+        newB.getMarkerAt(0, 1) must equalTo(Board.empty)
+        newB.getMarkerAt(1, 1) must equalTo(Game.O)
       }
 
       "Be able to allow next move" in {
-        val arr = List(List("X", " "), List(" ", "O"))
+        val arr = List(List(Game.X, Board.empty), List(Board.empty, Game.O))
         val b = new Board(arr)
         b.canMove must equalTo(true)
       }
 
       "Not be able to allow next move when full" in {
         val arr = List(
-          List("X", "O", "X"),
-          List("X", "O", "X"),
-          List("O", "X", "O")
+          List(Game.X, Game.O, Game.X),
+          List(Game.X, Game.O, Game.X),
+          List(Game.O, Game.X, Game.O)
         )
         val b = new Board(arr)
         b.canMove must equalTo(false)
       }
 
       "Not be able to allow next move when won" in {
-        val arr = List(List("X", "O"), List("X", " "))
+        val arr = List(List(Game.X, Game.O), List(Game.X, Board.empty))
         val b = new Board(arr)
         b.canMove must equalTo(false)
       }
 
       "Determine someone has won" in {
-        val arr = List(List("X", "O"), List("X", " "))
+        val arr = List(List(Game.X, Game.O), List(Game.X, Board.empty))
         val b = new Board(arr)
         b.hasSomeoneWon must equalTo(true)
 
-        val arr2 = List(List("X", "O"), List("O", " "))
+        val arr2 = List(List(Game.X, Game.O), List(Game.O, Board.empty))
         val b2 = new Board(arr2)
         b2.hasSomeoneWon must equalTo(true)
       }
 
       "Determine correct marker when won" in {
-        val arr = List(List("X", "O"), List("X", " "))
+        val arr = List(List(Game.X, Game.O), List(Game.X, Board.empty))
         val b = new Board(arr)
-        b.winningMarker must equalTo("X")
+        b.winningMarker must equalTo(Game.X)
 
-        val arr2 = List(List("O", "O"), List("X", " "))
+        val arr2 = List(List(Game.O, Game.O), List(Game.X, Board.empty))
         val b2 = new Board(arr2)
-        b2.winningMarker must equalTo("O")
+        b2.winningMarker must equalTo(Game.O)
       }
 
       "Not allow non equal sizes" in {
-        val arr = List(List("X", " "), List("X", " "))
+        val arr = List(List(Game.X, Board.empty), List(Game.X, Board.empty))
         val b = new Board(arr)
         val moves = b.allPossibleMoves
         moves must contain( (1,0) )
@@ -121,7 +121,7 @@ class BoardSpec extends Specification {
       }
 
       "Not allow non equal sizes" in {
-        val arr = List(List("X", "O", " "), List("X", " ", " "))
+        val arr = List(List(Game.X, Game.O, Board.empty), List(Game.X, Board.empty, Board.empty))
         try {
           val b = new Board(arr)
           true must equalTo(false)
@@ -131,10 +131,10 @@ class BoardSpec extends Specification {
       }
 
       "Not allow moving in non-empty space" in {
-        val arr = List(List("X", "O"), List("X", " "))
+        val arr = List(List(Game.X, Game.O), List(Game.X, Board.empty))
         val b = new Board(arr)
         try {
-          b.set((0, 0), "O")
+          b.set((0, 0), Game.O)
           true must equalTo(false)
         }catch {
           case _: Throwable => true must equalTo(true)
