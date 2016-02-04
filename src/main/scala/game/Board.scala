@@ -1,16 +1,23 @@
 package game
 
 
-case class Board(board: Array[Array[String]]) {
+case class Board(board: List[List[String]]) {
   require(board.forall(_.length == board.length))
 
   def this() = {
-    this(Array.fill[String](Board.boardSize, Board.boardSize)(Board.empty))
+    this(List.fill[String](Board.boardSize, Board.boardSize)(Board.empty))
   }
 
-  def set(pos: (Int, Int), marker: String) = {
+  def set(pos: (Int, Int), marker: String): Board = {
     require(board(pos._2)(pos._1) == " ")
-    board(pos._2)(pos._1) = marker
+
+    val newArr = for(y <- board.indices) yield {
+      for(x <- board(y).indices) yield {
+        if (x == pos._1 && y == pos._2) marker
+        else getMarkerAt(x, y)
+      }
+    }
+    new Board(newArr.map(_.toList).toList)
   }
 
   def canMove = board.exists( _.exists( _ == Board.empty) ) && !hasSomeoneWon

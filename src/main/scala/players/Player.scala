@@ -1,6 +1,8 @@
 package players
 
+import game.Board
+
 trait Player {
-  def move: (Int, Int)
+  def move(board: Board): (Int, Int)
   def getMarker: String
 }
