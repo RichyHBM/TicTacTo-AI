@@ -1,6 +1,5 @@
 package game
 
-
 case class Board(board: List[List[String]]) {
   require(board.forall(_.length == board.length))
 
@@ -8,6 +7,7 @@ case class Board(board: List[List[String]]) {
     this(List.fill[String](Board.boardSize, Board.boardSize)(Board.empty))
   }
 
+  //Return a new board with all the current markers and a new marker at the given position
   def set(pos: (Int, Int), marker: String): Board = {
     require(board(pos._2)(pos._1) == " ")
 
@@ -20,8 +20,10 @@ case class Board(board: List[List[String]]) {
     new Board(newArr.map(_.toList).toList)
   }
 
+  //Check if there are any non empty positions and there isnt a winner
   def canMove = board.exists( _.exists( _ == Board.empty) ) && !hasSomeoneWon
 
+  //Return all empty positions
   def allPossibleMoves = {
     for{
       y <- board.indices
@@ -29,8 +31,11 @@ case class Board(board: List[List[String]]) {
     } yield (x, y)
   }
 
+  //If the winning marker isnt an empty space, one of the players must have won
   def hasSomeoneWon: Boolean = winningMarker != Board.empty
 
+  //Returns the winning players marker if someone has won, or the empty marker if not
+  //check if a single marker is on any of the winning combinations
   def winningMarker: String = {
     val str = for {
       l <- Board.allWinningTilesForSize(board.length)
@@ -48,6 +53,7 @@ case class Board(board: List[List[String]]) {
   def getBoard = board
   def getMarkerAt(x: Int, y: Int): String = board(y)(x)
 
+  //Returns a string representation of the board in its current state
   def render : String = {
     val b = new StringBuilder
 
@@ -74,15 +80,19 @@ case class Board(board: List[List[String]]) {
 }
 
 object Board {
-
+  //Geta all permutations (as an Int tuple) of a value and a list of values
+  //I.e: 1, (1,2,3) will return (1,1), (1,2), (1,3)
   def allPerms(x: Int, y: List[Int]): List[(Int, Int)] = {
     if(y.length == 1) List((x, y.head))
     else (x, y.head) :: allPerms(x, y.tail)
   }
 
+  //Board values
   val boardSize = 3
   val empty = " "
 
+  //This gets all possible positions that a player must occupy to win a game
+  //It gets all rows, columns, and both diagonals
   def allWinningTilesForSize(size: Int): List[List[(Int, Int)]] = {
     val ver = for(i <- 0 until size) yield allPerms(i, List.range(0, size))
 

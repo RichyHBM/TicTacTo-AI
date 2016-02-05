@@ -8,7 +8,8 @@ object Main {
     val game = new Game(player1, player2)
     game.run
   }
-  
+
+  //Ask user what type of player to use
   def getPlayer(marker: String) = {
     println(s"What type of player should player '$marker' be?")
     val allPlayers = getAllPlayers(marker)
@@ -18,7 +19,7 @@ object Main {
     val input = scala.io.StdIn.readLine()
     allPlayers(input.toInt)
   }
-
+  
   def getAllPlayers(marker: String) = {
     List(
       new InputPlayer(marker),
