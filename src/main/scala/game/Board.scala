@@ -9,7 +9,7 @@ case class Board(board: List[List[String]]) {
 
   //Return a new board with all the current markers and a new marker at the given position
   def set(pos: (Int, Int), marker: String): Board = {
-    require(board(pos._2)(pos._1) == " ")
+    require(board(pos._2)(pos._1) == Game.empty)
 
     val newArr = for(y <- board.indices) yield {
       for(x <- board(y).indices) yield {
