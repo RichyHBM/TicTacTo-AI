@@ -4,7 +4,7 @@ case class Board(board: List[List[String]]) {
   require(board.forall(_.length == board.length))
 
   def this() = {
-    this(List.fill[String](Board.boardSize, Board.boardSize)(Board.empty))
+    this(List.fill[String](Game.boardSize, Game.boardSize)(Game.empty))
   }
 
   //Return a new board with all the current markers and a new marker at the given position
@@ -21,18 +21,18 @@ case class Board(board: List[List[String]]) {
   }
 
   //Check if there are any non empty positions and there isnt a winner
-  def canMove = board.exists( _.exists( _ == Board.empty) ) && !hasSomeoneWon
+  def canMove = board.exists( _.exists( _ == Game.empty) ) && !hasSomeoneWon
 
   //Return all empty positions
   def allPossibleMoves = {
     for{
       y <- board.indices
-      x <- board(y).indices if getMarkerAt(x, y) == Board.empty
+      x <- board(y).indices if getMarkerAt(x, y) == Game.empty
     } yield (x, y)
   }
 
   //If the winning marker isnt an empty space, one of the players must have won
-  def hasSomeoneWon: Boolean = winningMarker != Board.empty
+  def hasSomeoneWon: Boolean = winningMarker != Game.empty
 
   //Returns the winning players marker if someone has won, or the empty marker if not
   //check if a single marker is on any of the winning combinations
@@ -41,13 +41,13 @@ case class Board(board: List[List[String]]) {
       l <- Board.allWinningTilesForSize(board.length)
       s <- l.map(t => getMarkerAt(t._1, t._2)).distinct if
           l.map(t => getMarkerAt(t._1, t._2)).distinct.length == 1 &&
-          !l.map(t => getMarkerAt(t._1, t._2)).contains(Board.empty)
+          !l.map(t => getMarkerAt(t._1, t._2)).contains(Game.empty)
     } yield s
 
     if(str.toList.nonEmpty)
       str.head
     else
-      Board.empty
+      Game.empty
   }
 
   def getBoard = board
@@ -86,10 +86,6 @@ object Board {
     if(y.length == 1) List((x, y.head))
     else (x, y.head) :: allPerms(x, y.tail)
   }
-
-  //Board values
-  val boardSize = 3
-  val empty = " "
 
   //This gets all possible positions that a player must occupy to win a game
   //It gets all rows, columns, and both diagonals

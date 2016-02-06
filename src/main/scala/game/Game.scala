@@ -34,7 +34,7 @@ case class Game(player1: Player, player2: Player) {
     //Compare the winning marker to each of the player markers and write an appropriate message
     val winningMarker = endGame.winningMarker
 
-    if(winningMarker != Board.empty){
+    if(winningMarker != Game.empty){
       println(s"Player ${winningMarker} has won!")
     } else {
       println("It was a draw!")
@@ -46,6 +46,9 @@ case class Game(player1: Player, player2: Player) {
 object Game {
   val X = "X"
   val O = "O"
+  val boardSize = 5
+  val empty = " "
+
   def getOppositeMarker(marker: String) = {
     if(marker == X) O
     else X

@@ -1,5 +1,5 @@
 import game.Game
-import players.{RandomPlayer, AiPlayer, InputPlayer}
+import players._
 
 object Main {
   def main(args: Array[String]) = {
@@ -12,19 +12,24 @@ object Main {
   //Ask user what type of player to use
   def getPlayer(marker: String) = {
     println(s"What type of player should player '$marker' be?")
-    val allPlayers = getAllPlayers(marker)
-    for(i <- allPlayers.indices)
-      println(s" $i ${allPlayers(i).getClass.getSimpleName}")
+    println(
+      s""" 1 Input player
+         | 2 Random player
+         | 3 AI player
+       """.stripMargin)
 
-    val input = scala.io.StdIn.readLine()
-    allPlayers(input.toInt)
-  }
-  
-  def getAllPlayers(marker: String) = {
-    List(
-      new InputPlayer(marker),
-      new RandomPlayer(marker),
-      new AiPlayer(marker)
-    )
+    scala.io.StdIn.readLine() match {
+      case "1" => new InputPlayer(marker)
+      case "2" => new RandomPlayer(marker)
+      case "3" => {
+        println("What should the max depth to check be? (0 for no max depth)")
+        val inp = scala.io.StdIn.readLine().toInt
+        if(inp <= 0) {
+          new AiPlayer(marker)
+        } else {
+          new AiPlayer(marker, inp)
+        }
+      }
+    }
   }
 }

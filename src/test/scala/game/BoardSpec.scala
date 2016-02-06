@@ -42,36 +42,36 @@ class BoardSpec extends Specification {
       }
 
       "Render correctly" in {
-        val arr = List(List(Game.X, Board.empty), List(Board.empty, Game.O))
+        val arr = List(List(Game.X, Game.empty), List(Game.empty, Game.O))
         val b = new Board(arr)
         b.render must equalTo(
           "  0 1\n" +
-          s"0 ${Game.X}|${Board.empty}\n" +
+          s"0 ${Game.X}|${Game.empty}\n" +
           "  -+-\n" +
-          s"1 ${Board.empty}|${Game.O}\n")
+          s"1 ${Game.empty}|${Game.O}\n")
       }
 
       "Fetch correct marker" in {
-        val arr = List(List(Game.X, Game.O), List(Board.empty, Game.O))
+        val arr = List(List(Game.X, Game.O), List(Game.empty, Game.O))
         val b = new Board(arr)
         b.getMarkerAt(0, 0) must equalTo(Game.X)
         b.getMarkerAt(1, 0) must equalTo(Game.O)
-        b.getMarkerAt(0, 1) must equalTo(Board.empty)
+        b.getMarkerAt(0, 1) must equalTo(Game.empty)
         b.getMarkerAt(1, 1) must equalTo(Game.O)
       }
 
       "Set marker correctly" in {
-        val arr = List(List(Game.X, Board.empty), List(Board.empty, Game.O))
+        val arr = List(List(Game.X, Game.empty), List(Game.empty, Game.O))
         val b = new Board(arr)
         val newB = b.set((1, 0), Game.X)
         newB.getMarkerAt(0, 0) must equalTo(Game.X)
         newB.getMarkerAt(1, 0) must equalTo(Game.X)
-        newB.getMarkerAt(0, 1) must equalTo(Board.empty)
+        newB.getMarkerAt(0, 1) must equalTo(Game.empty)
         newB.getMarkerAt(1, 1) must equalTo(Game.O)
       }
 
       "Be able to allow next move" in {
-        val arr = List(List(Game.X, Board.empty), List(Board.empty, Game.O))
+        val arr = List(List(Game.X, Game.empty), List(Game.empty, Game.O))
         val b = new Board(arr)
         b.canMove must equalTo(true)
       }
@@ -87,33 +87,33 @@ class BoardSpec extends Specification {
       }
 
       "Not be able to allow next move when won" in {
-        val arr = List(List(Game.X, Game.O), List(Game.X, Board.empty))
+        val arr = List(List(Game.X, Game.O), List(Game.X, Game.empty))
         val b = new Board(arr)
         b.canMove must equalTo(false)
       }
 
       "Determine someone has won" in {
-        val arr = List(List(Game.X, Game.O), List(Game.X, Board.empty))
+        val arr = List(List(Game.X, Game.O), List(Game.X, Game.empty))
         val b = new Board(arr)
         b.hasSomeoneWon must equalTo(true)
 
-        val arr2 = List(List(Game.X, Game.O), List(Game.O, Board.empty))
+        val arr2 = List(List(Game.X, Game.O), List(Game.O, Game.empty))
         val b2 = new Board(arr2)
         b2.hasSomeoneWon must equalTo(true)
       }
 
       "Determine correct marker when won" in {
-        val arr = List(List(Game.X, Game.O), List(Game.X, Board.empty))
+        val arr = List(List(Game.X, Game.O), List(Game.X, Game.empty))
         val b = new Board(arr)
         b.winningMarker must equalTo(Game.X)
 
-        val arr2 = List(List(Game.O, Game.O), List(Game.X, Board.empty))
+        val arr2 = List(List(Game.O, Game.O), List(Game.X, Game.empty))
         val b2 = new Board(arr2)
         b2.winningMarker must equalTo(Game.O)
       }
 
       "Not allow non equal sizes" in {
-        val arr = List(List(Game.X, Board.empty), List(Game.X, Board.empty))
+        val arr = List(List(Game.X, Game.empty), List(Game.X, Game.empty))
         val b = new Board(arr)
         val moves = b.allPossibleMoves
         moves must contain( (1,0) )
@@ -121,7 +121,7 @@ class BoardSpec extends Specification {
       }
 
       "Not allow non equal sizes" in {
-        val arr = List(List(Game.X, Game.O, Board.empty), List(Game.X, Board.empty, Board.empty))
+        val arr = List(List(Game.X, Game.O, Game.empty), List(Game.X, Game.empty, Game.empty))
         try {
           val b = new Board(arr)
           true must equalTo(false)
@@ -131,7 +131,7 @@ class BoardSpec extends Specification {
       }
 
       "Not allow moving in non-empty space" in {
-        val arr = List(List(Game.X, Game.O), List(Game.X, Board.empty))
+        val arr = List(List(Game.X, Game.O), List(Game.X, Game.empty))
         val b = new Board(arr)
         try {
           b.set((0, 0), Game.O)

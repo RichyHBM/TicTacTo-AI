@@ -3,7 +3,12 @@ package players
 import game.{Game, Board}
 import scala.util.Random
 
-case class AiPlayer(marker: String) extends Player {
+case class AiPlayer(marker: String, maxDepth: Int) extends Player {
+
+  def this(marker: String) = {
+    this(marker, Integer.MAX_VALUE)
+  }
+
   //Computes the MinMax score for each of the available moves,
   // and returns the one with the highest score
   override def move(board: Board): (Int, Int) = {
@@ -23,8 +28,9 @@ case class AiPlayer(marker: String) extends Player {
 
   //Computes a score for a board state based on whose turn it is and how far down the tree it is
   def minMax(depth: Int, board: Board, ourMove: Boolean): Int = {
-    //Once there are no more moves that can be made, score the current state of the board
-    if(!board.canMove) scoreState(depth, board)
+    //Once there are no more moves that can be made, or we reach the limit to check
+    // score the current state of the board
+    if(!board.canMove || depth > maxDepth) scoreState(depth, board)
     else {
       //For all moves possible in this board, score the min max,
       // increasing the depth and swapping whose turn it would be
@@ -48,7 +54,7 @@ case class AiPlayer(marker: String) extends Player {
   def scoreState(depth: Int, board: Board): Int = {
     board.winningMarker match {
       case s if s == getMarker => AiPlayer.score - depth
-      case s if s == Board.empty => AiPlayer.noScore
+      case s if s == Game.empty => AiPlayer.noScore
       case _ => depth - AiPlayer.score
     }
   }

@@ -7,7 +7,7 @@ class AiPlayerSpec extends Specification {
 
   "AI Player" should {
     "Score win correctly" in {
-      val arr = List(List(Game.X, Game.O), List(Game.X, Board.empty))
+      val arr = List(List(Game.X, Game.O), List(Game.X, Game.empty))
       val b = new Board(arr)
       new AiPlayer(Game.X).scoreState(0, b) must equalTo(AiPlayer.score)
       new AiPlayer(Game.X).scoreState(1, b) must equalTo(AiPlayer.score - 1)
@@ -15,7 +15,7 @@ class AiPlayerSpec extends Specification {
     }
 
     "Score loss correctly" in {
-      val arr = List(List(Game.X, Game.O), List(Game.O, Board.empty))
+      val arr = List(List(Game.X, Game.O), List(Game.O, Game.empty))
       val b = new Board(arr)
       new AiPlayer(Game.X).scoreState(0, b) must equalTo(-AiPlayer.score)
       new AiPlayer(Game.X).scoreState(1, b) must equalTo(1 - AiPlayer.score)
@@ -23,19 +23,19 @@ class AiPlayerSpec extends Specification {
     }
 
     "Score tie correctly" in {
-      val arr = List(List(Game.X, Board.empty), List(Board.empty, Game.O))
+      val arr = List(List(Game.X, Game.empty), List(Game.empty, Game.O))
       val b = new Board(arr)
       new AiPlayer(Game.X).scoreState(0, b) must equalTo(AiPlayer.noScore)
     }
 
     "MinMax loss correctly" in {
-      val arr = List(List(Game.X, Game.O), List(Board.empty, Game.O))
+      val arr = List(List(Game.X, Game.O), List(Game.empty, Game.O))
       val b = new Board(arr)
       new AiPlayer(Game.X).minMax(0, b, ourMove = true) must equalTo(-AiPlayer.score)
     }
 
     "MinMax win correctly" in {
-      val arr = List(List(Game.X, Game.O), List(Board.empty, Board.empty))
+      val arr = List(List(Game.X, Game.O), List(Game.empty, Game.empty))
       val b = new Board(arr)
       new AiPlayer(Game.X).minMax(0, b, ourMove = true) must equalTo(AiPlayer.score - 1)
     }
