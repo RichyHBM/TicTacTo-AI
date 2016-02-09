@@ -2,10 +2,13 @@ package game
 
 import players.Player
 
+import scala.annotation.tailrec
+
 case class Game(player1: Player, player2: Player) {
 
   //Recursively
-  def doMove(currPlayer: Player, nextPlayer: Player, board: Board): Board = {
+  @tailrec
+  final def doMove(currPlayer: Player, nextPlayer: Player, board: Board): Board = {
     //Clear the screen and draw the board in its current state
     print("\033[H\033[2J")
     println(board.render)
@@ -16,10 +19,10 @@ case class Game(player1: Player, player2: Player) {
     val newBoard = board.set(playerMove, currPlayer.getMarker)
     //If there are still available moves (and no one has won) then recurse and swap player turn
     //Else return the state of the board after having made this turn
-    if(newBoard.canMove)
-      doMove(nextPlayer, currPlayer, newBoard)
-    else
+    if(!newBoard.canMove)
       newBoard
+    else
+      doMove(nextPlayer, currPlayer, newBoard)
   }
 
 
@@ -46,7 +49,7 @@ case class Game(player1: Player, player2: Player) {
 object Game {
   val X = "X"
   val O = "O"
-  val boardSize = 5
+  val boardSize = 3
   val empty = " "
 
   def getOppositeMarker(marker: String) = {
